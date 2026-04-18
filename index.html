@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yaman ng Asya — WebQuest</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green-dark:#064e3b;--green-mid:#059669;--green-light:#d1fae5;--green-pale:#ecfdf5;
+  --amber:#f59e0b;--amber-light:#fef3c7;--coral:#ef4444;--coral-light:#fee2e2;
+  --ink:#1a1a2e;--ink-soft:#374151;--muted:#6b7280;--border:#e5e7eb;
+  --white:#ffffff;--surface:#f9fafb;--radius:16px;--radius-sm:10px;
+}
+body{font-family:'Nunito Sans',sans-serif;background:#f0fdf4;color:var(--ink);min-height:100vh;}
+body::before{content:'';display:block;height:6px;background:linear-gradient(90deg,#064e3b,#059669,#f59e0b,#ef4444,#059669,#064e3b);}
+.page-wrap{max-width:740px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+
+/* HERO */
+.hero{background:var(--green-dark);border-radius:var(--radius);padding:2rem 2rem 1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.hero::after{content:'🌿';position:absolute;right:-10px;bottom:-20px;font-size:120px;opacity:0.08;pointer-events:none;}
+.hero .eyebrow{display:inline-block;background:rgba(255,255,255,0.15);color:#a7f3d0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:0.9rem;}
+.hero h1{font-family:'Nunito',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:0.6rem;}
+.hero p{color:#a7f3d0;font-size:14px;line-height:1.7;}
+.hero-meta{display:flex;gap:1rem;margin-top:1.1rem;flex-wrap:wrap;}
+.hero-meta span{font-size:12px;color:rgba(255,255,255,0.65);display:flex;align-items:center;gap:4px;}
+
+/* PROGRESS */
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+.prog-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:1.25rem;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#059669,#f59e0b);border-radius:3px;transition:width 0.4s ease;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:2px;-ms-overflow-style:none;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);transition:all 0.2s;font-family:'Nunito',sans-serif;}
+.tab:hover{border-color:var(--green-mid);color:var(--green-mid);}
+.tab.active{background:var(--green-dark);border-color:var(--green-dark);color:#fff;}
+.tab.done{background:var(--green-pale);border-color:#6ee7b7;color:var(--green-dark);}
+
+/* SECTIONS */
+.section{display:none;}
+.section.visible{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* CARDS */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.card h3{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;color:var(--ink);margin-bottom:0.6rem;}
+.card p,.card li{font-size:14px;color:var(--ink-soft);line-height:1.8;}
+.card ul{padding-left:1.2rem;margin-top:0.5rem;}
+.card li{margin-bottom:6px;}
+
+/* SCENARIO */
+.scenario{background:var(--green-pale);border:1.5px solid #6ee7b7;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.scenario .s-icon{font-size:28px;margin-bottom:0.5rem;display:block;}
+.scenario p{font-size:14px;color:var(--green-dark);line-height:1.8;}
+.scenario strong{color:#065f46;}
+
+/* SECTION HEADER PILL */
+.section-pill{display:inline-flex;align-items:center;gap:7px;background:var(--green-dark);color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;padding:6px 16px;border-radius:20px;margin-bottom:1rem;}
+
+/* TASK LABEL */
+.task-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green-mid);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.task-label::before{content:'';display:inline-block;width:3px;height:14px;background:var(--green-mid);border-radius:2px;}
+
+/* STEP ROWS */
+.step-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed var(--border);}
+.step-item:last-child{border-bottom:none;}
+.step-num{min-width:32px;height:32px;border-radius:50%;background:var(--green-dark);color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-content h4{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.step-content p{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+
+/* RESOURCE LINKS */
+.resource-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border);}
+.resource-item:last-child{border-bottom:none;}
+.resource-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.resource-info h4{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.resource-info p{font-size:12px;color:var(--muted);line-height:1.6;}
+.resource-info a{font-size:12px;color:var(--green-mid);text-decoration:none;font-weight:600;}
+.resource-info a:hover{text-decoration:underline;}
+
+/* FORMS */
+textarea,select{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;font-family:'Nunito Sans',sans-serif;color:var(--ink);background:var(--surface);resize:vertical;line-height:1.65;transition:border-color 0.2s,box-shadow 0.2s;appearance:none;}
+textarea:focus,select:focus{outline:none;border-color:var(--green-mid);background:var(--white);box-shadow:0 0 0 4px rgba(5,150,105,0.1);}
+textarea::placeholder{color:#9ca3af;}
+.field-wrap{margin-top:0.75rem;}
+.field-label{font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;display:block;}
+
+/* CHIPS */
+.chip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:0.6rem;}
+.chip{padding:12px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--ink-soft);text-align:center;line-height:1.4;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.chip:hover{border-color:var(--green-mid);background:var(--green-pale);}
+.chip.selected{border-color:var(--green-mid);background:var(--green-light);color:var(--green-dark);}
+.chip .chip-icon{font-size:22px;}
+
+/* RUBRIC */
+.rubric-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px dashed var(--border);}
+.rubric-item:last-child{border-bottom:none;}
+.rubric-pts{min-width:48px;height:48px;border-radius:12px;background:var(--green-light);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.rubric-pts .pts-num{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--green-dark);line-height:1;}
+.rubric-pts .pts-lbl{font-size:9px;font-weight:700;color:var(--green-mid);letter-spacing:0.5px;}
+.rubric-info h4{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.rubric-info p{font-size:13px;color:var(--muted);line-height:1.65;}
+.rubric-total{background:var(--green-dark);border-radius:var(--radius-sm);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;}
+.rubric-total span{font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:15px;}
+
+/* GRADE SCALE */
+.grade-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:0.75rem;}
+.grade-pill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;}
+.g-out{background:#d1fae5;color:#064e3b;}
+.g-pro{background:#dbeafe;color:#1e40af;}
+.g-dev{background:#fef3c7;color:#92400e;}
+.g-beg{background:#fee2e2;color:#991b1b;}
+
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:10px;}
+.btn{padding:11px 22px;border-radius:30px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--muted);transition:all 0.18s;}
+.btn:hover{background:var(--surface);border-color:#9ca3af;}
+.btn-primary{background:var(--green-dark);border-color:var(--green-dark);color:#fff;box-shadow:0 4px 14px rgba(6,78,59,0.25);}
+.btn-primary:hover{background:#065f46;border-color:#065f46;transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,78,59,0.3);}
+.btn-print{background:var(--amber);border-color:var(--amber);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,0.3);}
+.btn-print:hover{background:#d97706;border-color:#d97706;}
+
+/* SUMMARY */
+.sum-block{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.875rem 1rem;margin-bottom:0.6rem;}
+.sum-block .sum-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px;}
+.sum-block .sum-val{font-size:13px;color:var(--ink);line-height:1.65;white-space:pre-wrap;}
+
+/* CONGRATS */
+.congrats{background:var(--green-dark);border-radius:var(--radius);padding:1.75rem;text-align:center;margin-bottom:1rem;}
+.congrats .cg-icon{font-size:44px;margin-bottom:0.5rem;display:block;}
+.congrats h2{font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:0.4rem;}
+.congrats p{font-size:14px;color:#a7f3d0;line-height:1.7;}
+
+/* HIGHLIGHT BOX */
+.highlight{background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:0.875rem 1rem;margin-top:0.75rem;}
+.highlight p{font-size:13px;color:#78350f;line-height:1.7;}
+
+/* INFO STRIP */
+.info-strip{display:flex;align-items:center;gap:8px;background:var(--green-pale);border-radius:var(--radius-sm);padding:10px 14px;margin-top:0.75rem;}
+.info-strip p{font-size:13px;color:var(--green-dark);line-height:1.6;}
+
+/* COUNTRY BADGE */
+#country-display{display:none;margin-top:0.6rem;}
+#country-display.show{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green-dark);font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;font-family:'Nunito',sans-serif;}
+
+/* MOBILE */
+@media(max-width:480px){
+  .hero h1{font-size:21px;}
+  .chip-grid{grid-template-columns:repeat(2,1fr);}
+  .nav-row{flex-direction:column;}
+  .btn{width:100%;text-align:center;}
+  .grade-row{flex-direction:column;}
+}
+
+@media print{
+  body::before,.tabs,.prog-bar,.prog-labels,.nav-row,.hero::after{display:none!important;}
+  .section{display:block!important;}
+  .card,.scenario,.sum-block{break-inside:avoid;}
+  .page-wrap{max-width:100%;padding:1rem;}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Grade 7 · Araling Panlipunan · WebQuest</div>
+  <h1>Ikaw ang Tagapagligtas ng Kalikasan! 🌿</h1>
+  <p>Maligayang pagdating, Environmental Detective! Ang Timog-Silangang Asya ay isa sa mga pinaka-mayamang rehiyon sa mundo — pero nanganganib na ito. Handa ka bang tuklasin kung bakit, at hanapin ang solusyon?</p>
+  <div class="hero-meta">
+    <span>⏱ ~30 minuto</span>
+    <span>📖 Individual na gawain</span>
+    <span>🎯 Grade 7 AP — Modyul 2</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div>
+  <div class="prog-labels"><span id="prog-text">Panimula</span><span id="prog-pct">0%</span></div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" id="tab0" onclick="goTo(0)">🏠 Panimula</div>
+  <div class="tab" id="tab1" onclick="goTo(1)">📋 Gawain</div>
+  <div class="tab" id="tab2" onclick="goTo(2)">🗺 Proseso</div>
+  <div class="tab" id="tab3" onclick="goTo(3)">🔗 Kagamitan</div>
+  <div class="tab" id="tab4" onclick="goTo(4)">📊 Ebalwasyon</div>
+  <div class="tab" id="tab5" onclick="goTo(5)">✅ Konklusyon</div>
+</div>
+
+<!-- ══════════════ S0: PANIMULA / INTRODUCTION ══════════════ -->
+<div id="s0" class="section visible">
+  <div class="section-pill">🏠 Panimula — Introduction</div>
+
+  <div class="scenario">
+    <span class="s-icon">🕵️</span>
+    <p><strong>Ang Sitwasyon:</strong> Isipin mo na ikaw ay isang batang Environmental Detective na hinirang ng United Nations. Nakatanggap ka ng isang mensahe — ang isang bansa sa Timog-Silangang Asya ay nanganganib ang likas na yaman, at kailangan nilang ng tulong. Ikaw lang ang makakatulong!</p>
+  </div>
+
+  <div class="card">
+    <h3>Bakit ito mahalaga?</h3>
+    <p>Ang Timog-Silangang Asya ay tahanan ng ilan sa mga pinaka-mayamang likas na yaman sa buong mundo — mula sa gintong nakabaon sa lupa ng Pilipinas, hanggang sa malawak na kagubatan ng Myanmar at Indonesia. Bilang isang estudyante, mahalaga na maunawaan mo kung paano ginagamit ang mga yamang ito, at kung paano natin sila mapangangalagaan para sa susunod na henerasyon.</p>
+    <p style="margin-top:10px;">Sa WebQuest na ito, maglalakbay ka sa anim na bahagi — bawat isa ay tutulong sa iyo na maging isang tunay na Environmental Detective!</p>
+  </div>
+
+  <div class="card">
+    <h3>Paano gumagana ang WebQuest na ito?</h3>
+    <ul>
+      <li>Sundan ang mga tab sa itaas — mula <strong>Panimula</strong> hanggang <strong>Konklusyon</strong></li>
+      <li>Sa <strong>Proseso</strong>, susundan mo ang mga hakbang at sasagutan ang mga tanong</li>
+      <li>Gamitin ang mga link sa <strong>Kagamitan</strong> para mahanap ang impormasyon</li>
+      <li>Sa <strong>Konklusyon</strong>, makikita mo ang lahat ng iyong mga sagot at maaari mong i-print</li>
+      <li><strong>Mahalaga:</strong> Huwag kopyahin — gamitin ang iyong sariling mga salita!</li>
+    </ul>
+    <div class="info-strip">
+      <span style="font-size:18px;">💡</span>
+      <p>Hindi ito pagsusulit — ito ay isang pagtuklas. Walang maling sagot basta nag-iisip ka nang maayos!</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Una — pumili ng bansa! 🗺️</h3>
+    <p style="margin-bottom:12px;">Piliin ang bansang iyong iimbestigahan sa buong WebQuest na ito. Ito ang magiging sentro ng lahat ng iyong mga sagot.</p>
+    <select id="country-select" onchange="saveCountry()">
+      <option value="">— Pumili ng bansa —</option>
+      <option>Pilipinas 🇵🇭</option>
+      <option>Myanmar 🇲🇲</option>
+      <option>Malaysia 🇲🇾</option>
+      <option>Indonesia 🇮🇩</option>
+      <option>Vietnam 🇻🇳</option>
+      <option>Thailand 🇹🇭</option>
+      <option>Cambodia 🇰🇭</option>
+      <option>Brunei 🇧🇳</option>
+    </select>
+    <div id="country-display"></div>
+  </div>
+
+  <div class="nav-row">
+    <span></span>
+    <button class="btn btn-primary" onclick="startMission()">Pumunta sa Gawain →</button>
+  </div>
+</div>
+
+<!-- ══════════════ S1: GAWAIN / TASK ══════════════ -->
+<div id="s1" class="section">
+  <div class="section-pill">📋 Gawain — Task</div>
+
+  <div class="scenario">
+    <span class="s-icon">🎯</span>
+    <p><strong>Ang Iyong Misyon:</strong> Bilang isang Environmental Detective, ang iyong pinal na gawain ay lumikha ng isang <strong>maikling Environmental Report Card</strong> para sa iyong napiling bansa. Ipapakita nito ang mga likas na yaman ng bansa, ang pangunahing suliranin nito, at ang iyong inirerekomendang solusyon.</p>
+  </div>
+
+  <div class="card">
+    <h3>Ano ang gagawin mo?</h3>
+    <p>Sa katapusan ng WebQuest, ikaw ay makakalikha ng isang <strong>Environmental Report Card</strong> na naglalaman ng:</p>
+    <ul>
+      <li>📌 Listahan ng mga pangunahing likas na yaman ng iyong napiling bansa</li>
+      <li>📌 Pagsusuri kung ang mga yamang ito ay <em>biotic/abiotic</em> at <em>renewable/non-renewable</em></li>
+      <li>📌 Isa o dalawang suliranin na kinakaharap ng bansa kaugnay sa likas na yaman</li>
+      <li>📌 Isang kongkretong solusyon batay sa konsepto ng <em>likas-kayang pag-unlad</em></li>
+      <li>📌 Isang personal na pangako — ang iyong sariling hakbang bilang kabataan</li>
+      <li>📌 Isang orihinal na slogan para sa kalikasan</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Bakit Environmental Report Card?</h3>
+    <p>Ang mga tunay na environmental scientists at policy makers ay gumagawa ng ganitong uri ng ulat para matulungan ang mga pamahalaan na gumawa ng mas matalinong desisyon para sa kalikasan. Sa paggawa ng iyong sariling report card, natututo kang mag-isip tulad ng isang tunay na environmental advocate!</p>
+    <div class="highlight">
+      <p>🔎 <strong>Tandaan:</strong> Hindi kailangan ng perpektong sagot — ang mahalaga ay nagpapakita ka ng iyong pag-unawa at kritikal na pag-iisip. Gamitin ang mga kagamitan sa susunod na tab para mahanap ang impormasyon!</p>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="goTo(0)">← Bumalik</button>
+    <button class="btn btn-primary" onclick="markDone(1)">Pumunta sa Proseso →</button>
+  </div>
+</div>
+
+<!-- ══════════════ S2: PROSESO / PROCESS ══════════════ -->
+<div id="s2" class="section">
+  <div class="section-pill">🗺 Proseso — Process</div>
+
+  <div class="scenario">
+    <span class="s-icon">📝</span>
+    <p><strong>Sundan ang mga hakbang na ito</strong> para mabuo ang iyong Environmental Report Card. Gamitin ang mga link sa <strong>Kagamitan</strong> tab para mahanap ang impormasyon na kailangan mo sa bawat hakbang.</p>
+  </div>
+
+  <!-- HAKBANG 1 -->
+  <div class="card">
+    <h3>Hakbang 1 — Tukuyin ang mga Likas na Yaman 🔍</h3>
+    <div class="step-item">
+      <div class="step-num">A</div>
+      <div class="step-content">
+        <h4>Pumili ng mga yamang makikita sa iyong bansa</h4>
+        <p>Alin sa mga ito ang pangunahing likas na yaman ng iyong napiling bansa? Maaaring pumili ng marami. Tingnan ang Modyul 2 para sa impormasyon.</p>
+      </div>
+    </div>
+    <div class="chip-grid" id="chips-resources" style="margin:0 0 16px 44px;max-width:calc(100% - 44px);">
+      <div class="chip" onclick="toggleChip(this)"><span class="chip-icon">🪨</span>Yamang Mineral<br><small style="font-size:10px;font-weight:400;color:var(--muted);">ginto, langis, nickel...</small></div>
+      <div class="chip" onclick="toggleChip(this)"><span class="chip-icon">🌊</span>Yamang Tubig<br><small style="font-size:10px;font-weight:400;color:var(--muted);">karagatan, ilog, hydropower</small></div>
+      <div class="chip" onclick="toggleChip(this)"><span class="chip-icon">🌿</span>Yamang Gubat<br><small style="font-size:10px;font-weight:400;color:var(--muted);">puno, hayop, gamot</small></div>
+      <div class="chip" onclick="toggleChip(this)"><span class="chip-icon">🌾</span>Yamang Lupa<br><small style="font-size:10px;font-weight:400;color:var(--muted);">sakahan, kapatagan</small></div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">B</div>
+      <div class="step-content">
+        <h4>I-classify: Biotic o Abiotic?</h4>
+        <p>Ang langis at natural gas — biotic o abiotic na likas na yaman? Ipaliwanag ang iyong sagot nang buo.</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:4px;">💡 Biotic = galing sa buhay na bagay · Abiotic = galing sa hindi buhay na bagay</p>
+      </div>
+    </div>
+    <textarea id="t1" rows="3" placeholder="Isulat dito ang iyong sagot..." style="margin:0 0 12px 0;"></textarea>
+    <div class="step-item">
+      <div class="step-num">C</div>
+      <div class="step-content">
+        <h4>Renewable o Non-Renewable?</h4>
+        <p>Mula sa mga likas na yaman na pinili mo, isa-isahin kung alin ang renewable at alin ang non-renewable. Ipaliwanag ang pagkakaiba.</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:4px;">💡 Renewable = mabilis na mapapalitan ng kalikasan · Non-renewable = tatagal ng milyun-milyong taon</p>
+      </div>
+    </div>
+    <textarea id="t2" rows="3" placeholder="Hal: Ang ginto ay non-renewable dahil..."></textarea>
+  </div>
+
+  <!-- HAKBANG 2 -->
+  <div class="card">
+    <h3>Hakbang 2 — Suriin ang Suliranin ⚠️</h3>
+    <div class="step-item">
+      <div class="step-num">A</div>
+      <div class="step-content">
+        <h4>Ano ang pangunahing suliranin?</h4>
+        <p>Sa palagay mo, ano ang pinakamalaking banta sa likas na yaman ng iyong napiling bansa?</p>
+      </div>
+    </div>
+    <div class="chip-grid" id="chips-problem" style="margin:0 0 16px 44px;max-width:calc(100% - 44px);">
+      <div class="chip" onclick="pickOne(this,'chips-problem')"><span class="chip-icon">🪵</span>Deforestation<br><small style="font-size:10px;font-weight:400;color:var(--muted);">illegal logging</small></div>
+      <div class="chip" onclick="pickOne(this,'chips-problem')"><span class="chip-icon">🏭</span>Polusyon sa Hangin<br><small style="font-size:10px;font-weight:400;color:var(--muted);">mula sa industriya</small></div>
+      <div class="chip" onclick="pickOne(this,'chips-problem')"><span class="chip-icon">⛏️</span>Labis na Pagmimina<br><small style="font-size:10px;font-weight:400;color:var(--muted);">overextraction</small></div>
+      <div class="chip" onclick="pickOne(this,'chips-problem')"><span class="chip-icon">🌊</span>Polusyon sa Tubig<br><small style="font-size:10px;font-weight:400;color:var(--muted);">basura sa karagatan</small></div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">B</div>
+      <div class="step-content">
+        <h4>Ano ang mga epekto nito?</h4>
+        <p>Kung patuloy ang suliranin na iyong pinili, ano ang mangyayari sa mga susunod na henerasyon? Mag-isip ng dalawang kongkretong epekto — sa tao, sa kalikasan, o sa ekonomiya.</p>
+      </div>
+    </div>
+    <textarea id="t3" rows="4" placeholder="Una... Pangalawa..."></textarea>
+  </div>
+
+  <!-- HAKBANG 3 -->
+  <div class="card">
+    <h3>Hakbang 3 — Bumuo ng Solusyon 💡</h3>
+    <div class="step-item">
+      <div class="step-num">A</div>
+      <div class="step-content">
+        <h4>Ang solusyon ng bansa</h4>
+        <p>Mag-isip ng isang kongkretong hakbang na maaaring gawin ng iyong napiling bansa para maprotektahan ang likas na yaman. Dapat ito ay makatotohanan at nagpapakita ng konsepto ng <em>likas-kayang pag-unlad</em>.</p>
+      </div>
+    </div>
+    <textarea id="t4" rows="4" placeholder="Hal: Ang pamahalaan ng Pilipinas ay dapat magpatupad ng mas mahigpit na patakaran..."></textarea>
+    <div class="step-item" style="margin-top:12px;">
+      <div class="step-num">B</div>
+      <div class="step-content">
+        <h4>Ang iyong personal na hakbang</h4>
+        <p>Kahit estudyante ka, kaya mong gumawa ng pagbabago! Isulat ang isang bagay na maaari mong gawin simula ngayon — sa iyong bahay, paaralan, o komunidad.</p>
+      </div>
+    </div>
+    <textarea id="t5" rows="3" placeholder="Hal: Magsisimula akong mag-segregate ng basura..."></textarea>
+    <div class="step-item" style="margin-top:12px;">
+      <div class="step-num">C</div>
+      <div class="step-content">
+        <h4>Ang iyong slogan ✨</h4>
+        <p>Lumikha ng isang catchy na slogan (1–2 pangungusap) na nagpapahayag ng iyong mensahe para sa kalikasan. Maging malikhaing at orihinal!</p>
+      </div>
+    </div>
+    <textarea id="t6" rows="2" placeholder="Hal: Ang kalikasan ay hindi pamana — ito ay hiniram natin sa ating mga anak!"></textarea>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="goTo(1)">← Bumalik</button>
+    <button class="btn btn-primary" onclick="markDone(2)">Pumunta sa Kagamitan →</button>
+  </div>
+</div>
+
+<!-- ══════════════ S3: KAGAMITAN / RESOURCES ══════════════ -->
+<div id="s3" class="section">
+  <div class="section-pill">🔗 Kagamitan — Resources</div>
+
+  <div class="card">
+    <h3>Gamitin ang mga ito habang sinasagutan ang Proseso</h3>
+    <p>Hindi mo kailangang basahin ang lahat — hanapin lang ang impormasyon na kailangan mo para sa iyong napiling bansa. Maaari kang bumalik dito anumang oras!</p>
+  </div>
+
+  <div class="card">
+    <div class="resource-item">
+      <div class="resource-icon" style="background:#d1fae5;">📄</div>
+      <div class="resource-info">
+        <h4>Modyul 2 — Pangunahing Sanggunian</h4>
+        <p>Ito ang pangunahing mapagkukunan mo. Naglalaman ito ng lahat — kahulugan ng likas na yaman, biotic/abiotic, renewable/non-renewable, at ang mga likas na yaman ng bawat bansa sa TSA. Tingnan lalo na ang <strong>pahina 7–15</strong> at ang <strong>talahanayan ng yamang mineral sa pahina 12</strong>.</p>
+        <a href="#" onclick="alert('I-refer sa PDF ng Modyul 2 na ibinigay ng iyong guro.')">📥 Modyul 2 — Araling Panlipunan Grade 7</a>
+      </div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon" style="background:#dbeafe;">🌐</div>
+      <div class="resource-info">
+        <h4>Natural Resources of Southeast Asia — Invest SEA</h4>
+        <p>Nagbibigay ng pangkalahatang impormasyon tungkol sa mga likas na yaman ng bawat bansa sa Timog-Silangang Asya — mineral, agrikultura, at enerhiya.</p>
+        <a href="https://investsea.org/natural-resources/" target="_blank">🔗 investsea.org/natural-resources</a>
+      </div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon" style="background:#fef3c7;">🗺</div>
+      <div class="resource-info">
+        <h4>World Atlas — Southeast Asia Countries</h4>
+        <p>Mabilis na reference para sa impormasyon tungkol sa bawat bansa — lokasyon, ekonomiya, at natural resources.</p>
+        <a href="https://www.worldatlas.com/geography/southeast-asia.html" target="_blank">🔗 worldatlas.com — Southeast Asia</a>
+      </div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon" style="background:#fee2e2;">🌱</div>
+      <div class="resource-info">
+        <h4>Ano ang Sustainable Development? — UN Explainer</h4>
+        <p>Maikling paliwanag ng United Nations tungkol sa konsepto ng <em>likas-kayang pag-unlad</em> — mahalaga ito para sa Hakbang 3 ng Proseso.</p>
+        <a href="https://www.un.org/en/academic-impact/sustainability" target="_blank">🔗 un.org — Sustainability Explainer</a>
+      </div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon" style="background:#ede9fe;">📚</div>
+      <div class="resource-info">
+        <h4>Athenaeum Open Academy — AP Grade 7 Q1</h4>
+        <p>Karagdagang reading material tungkol sa Pisikal na Heograpiya ng Timog-Silangang Asya — kapaki-pakinabang para sa background na impormasyon.</p>
+        <a href="https://athenaeumopenacademy.altervista.org/pisikal-na-heograpiya-ng-timog-silangang-asya/" target="_blank">🔗 athenaeumopenacademy.altervista.org</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Mabilis na Reference — Yamang Mineral per Bansa</h3>
+    <p style="margin-bottom:10px;font-size:13px;color:var(--muted);">Mula sa Modyul 2, pahina 12:</p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:var(--green-pale);">
+            <th style="text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);font-family:'Nunito',sans-serif;color:var(--green-dark);">Bansa</th>
+            <th style="text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);font-family:'Nunito',sans-serif;color:var(--green-dark);">Pangunahing Yamang Mineral</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Pilipinas 🇵🇭</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Tanso, Ginto, Pilak, Nickel, Langis, Natural gas</td></tr>
+          <tr style="background:var(--surface);"><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Myanmar 🇲🇲</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Langis, Natural gas, Tin, Zinc, Tanso, Jade, Ruby, Sapphire</td></tr>
+          <tr><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Malaysia 🇲🇾</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Langis, Natural gas, Bauxite, Tanso, Bakal, Pilak, Ginto</td></tr>
+          <tr style="background:var(--surface);"><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Indonesia 🇮🇩</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Langis, Natural gas, Tin, Bauxite, Tanso, Nickel, Ginto, Diyamante</td></tr>
+          <tr><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Vietnam 🇻🇳</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Ginto, Bakal, Zinc, Phosphate, Chromite, Karbon</td></tr>
+          <tr style="background:var(--surface);"><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Thailand 🇹🇭</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Karbon, Zinc, Tingga, Tin, Gypsum, Bakal</td></tr>
+          <tr><td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">Cambodia 🇰🇭</td><td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink-soft);">Zircon, Sapphire, Ruby, Asin, Manganese, Marmol</td></tr>
+          <tr style="background:var(--surface);"><td style="padding:7px 10px;font-weight:600;">Brunei 🇧🇳</td><td style="padding:7px 10px;color:var(--ink-soft);">Langis, Natural gas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="goTo(2)">← Bumalik sa Proseso</button>
+    <button class="btn btn-primary" onclick="markDone(3)">Pumunta sa Ebalwasyon →</button>
+  </div>
+</div>
+
+<!-- ══════════════ S4: EBALWASYON / EVALUATION ══════════════ -->
+<div id="s4" class="section">
+  <div class="section-pill">📊 Ebalwasyon — Evaluation</div>
+
+  <div class="card">
+    <h3>Paano ka susuriin ng iyong guro?</h3>
+    <p>Bago mo tapusin ang WebQuest, basahin ang rubric na ito para malaman kung ano ang inaasahan. Ito ang batayan ng iyong guro sa pag-grade ng iyong Environmental Report Card.</p>
+  </div>
+
+  <div class="card">
+    <div class="rubric-item">
+      <div class="rubric-pts"><span class="pts-num">10</span><span class="pts-lbl">pts</span></div>
+      <div class="rubric-info">
+        <h4>Katumpakan ng Impormasyon</h4>
+        <p>Tama at kumpleto ang impormasyon tungkol sa mga likas na yaman ng napiling bansa. Ang classification (biotic/abiotic, renewable/non-renewable) ay ginawa nang wasto at may malinaw na paliwanag.</p>
+      </div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-pts"><span class="pts-num">10</span><span class="pts-lbl">pts</span></div>
+      <div class="rubric-info">
+        <h4>Kritikal na Pag-iisip</h4>
+        <p>Nagpapakita ng sariling pagsusuri sa suliranin at epekto nito — hindi lang basta kopya mula sa modyul. Ang sagot ay nagpapakita ng mas malalim na pag-unawa kaysa sa simpleng paglilista ng mga katotohanan.</p>
+      </div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-pts"><span class="pts-num">7</span><span class="pts-lbl">pts</span></div>
+      <div class="rubric-info">
+        <h4>Aplikasyon — Solusyon at Personal na Hakbang</h4>
+        <p>Ang solusyon para sa bansa ay makatotohanan at nagpapakita ng tunay na pag-unawa sa konsepto ng likas-kayang pag-unlad. Ang personal na hakbang ay tiyak at makakamit talaga.</p>
+      </div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-pts"><span class="pts-num">3</span><span class="pts-lbl">pts</span></div>
+      <div class="rubric-info">
+        <h4>Pagkamalikhain ng Slogan</h4>
+        <p>Ang slogan ay orihinal, makabuluhan, at nagpapahayag ng mensahe nang malinaw. May emosyon at may dating — hindi generic!</p>
+      </div>
+    </div>
+    <div class="rubric-total">
+      <span>Kabuuang Puntos</span>
+      <span>30 pts</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Grading Scale</h3>
+    <div class="grade-row">
+      <div class="grade-pill g-out">27–30 pts — Outstanding ⭐</div>
+      <div class="grade-pill g-pro">22–26 pts — Proficient 👍</div>
+      <div class="grade-pill g-dev">16–21 pts — Developing 📈</div>
+      <div class="grade-pill g-beg">Below 16 — Needs Improvement 💪</div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="goTo(3)">← Bumalik</button>
+    <button class="btn btn-primary" onclick="markDone(4)">Pumunta sa Konklusyon →</button>
+  </div>
+</div>
+
+<!-- ══════════════ S5: KONKLUSYON / CONCLUSION ══════════════ -->
+<div id="s5" class="section">
+  <div class="section-pill">✅ Konklusyon — Conclusion</div>
+
+  <div class="congrats">
+    <span class="cg-icon">🎉</span>
+    <h2>Natapos mo ang WebQuest!</h2>
+    <p>Ikaw ay hindi na basta isang estudyante — ikaw ay naging isang Environmental Detective na may malalim na pag-unawa sa likas na yaman ng Timog-Silangang Asya. Proud na proud kami sa iyo!</p>
+  </div>
+
+  <div class="card">
+    <h3>Ano ang natutunan mo?</h3>
+    <p>Sa pamamagitan ng WebQuest na ito, natutunan mo na:</p>
+    <ul>
+      <li>Ang mga likas na yaman ay may iba't ibang uri — at ang bawat uri ay may natatanging kahalagahan</li>
+      <li>Ang bawat bansa sa Timog-Silangang Asya ay may sariling kayamanan na kailangan pa ring pangalagaan</li>
+      <li>Ang mga suliranin tulad ng deforestation at polusyon ay may malaking epekto sa hinaharap</li>
+      <li>Ang <em>likas-kayang pag-unlad</em> ay posible — at ito ay nagsisimula sa bawat isa sa atin</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Isang huling tanong para sa iyo 🤔</h3>
+    <p style="margin-bottom:12px;">Bago mo isara ang WebQuest na ito, sagutin ang tanong na ito bilang iyong final reflection:</p>
+    <div class="task-label">Reflection</div>
+    <p style="margin-bottom:10px;font-size:14px;color:var(--ink-soft);">Paano nakakaapekto ang paggamit ng likas na yaman sa Timog-Silangang Asya sa pangmatagalang pag-unlad ng rehiyon — at paano maaaring balansehin ang kaunlaran at pangangalaga sa kalikasan?</p>
+    <textarea id="t7" rows="5" placeholder="Isulat dito ang iyong sariling pag-iisip. Walang maling sagot — ang mahalaga ay tapat at buo ang iyong nararamdaman!"></textarea>
+  </div>
+
+  <div class="card" id="summary-card">
+    <h3>📋 Buod ng Iyong Environmental Report Card</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Narito ang lahat ng iyong mga sagot. Maaari mo itong i-print o i-screenshot para ipasa sa iyong guro.</p>
+    <div id="summary-area"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="goTo(4)">← Bumalik</button>
+    <button class="btn btn-print" onclick="buildAndPrint()">🖨️ I-print ang Report Card</button>
+  </div>
+</div>
+
+</div><!-- end page-wrap -->
+
+<script>
+var cur=0;
+var country='';
+var progLabels=['Panimula','Gawain','Proseso','Kagamitan','Ebalwasyon','Konklusyon'];
+var progPcts=[0,20,40,60,80,100];
+
+function saveCountry(){
+  country=document.getElementById('country-select').value;
+  var d=document.getElementById('country-display');
+  if(country){d.textContent='✔ '+country;d.className='show';}
+  else{d.className='';}
+}
+
+function goTo(n){
+  document.getElementById('s'+cur).classList.remove('visible');
+  document.getElementById('tab'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('s'+cur).classList.add('visible');
+  document.getElementById('tab'+cur).classList.add('active');
+  document.getElementById('prog-fill').style.width=progPcts[cur]+'%';
+  document.getElementById('prog-text').textContent=progLabels[cur];
+  document.getElementById('prog-pct').textContent=progPcts[cur]+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===5){buildSummary();}
+}
+
+function startMission(){
+  if(!document.getElementById('country-select').value){
+    alert('Huwag kalimutang pumili ng bansa bago magsimula! 🌏');
+    return;
+  }
+  markDone(0);
+}
+
+function markDone(from){
+  document.getElementById('tab'+from).classList.add('done');
+  goTo(from+1);
+}
+
+function toggleChip(el){el.classList.toggle('selected');}
+
+function pickOne(el,groupId){
+  document.querySelectorAll('#'+groupId+' .chip').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+}
+
+function getChips(groupId){
+  var sel=[];
+  document.querySelectorAll('#'+groupId+' .chip.selected').forEach(function(c){
+    sel.push(c.innerText.split('\n')[0].trim());
+  });
+  return sel.length?sel.join(', '):'(walang pinili)';
+}
+
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function buildSummary(){
+  var fields=[
+    ['Napiling Bansa',document.getElementById('country-select').value||'(hindi pinili)'],
+    ['Mga Likas na Yaman (H1-A)',getChips('chips-resources')],
+    ['Biotic o Abiotic — Langis/Gas (H1-B)',document.getElementById('t1').value||'(walang sagot)'],
+    ['Renewable o Non-Renewable (H1-C)',document.getElementById('t2').value||'(walang sagot)'],
+    ['Pangunahing Suliranin (H2-A)',getChips('chips-problem')],
+    ['Epekto sa Susunod na Henerasyon (H2-B)',document.getElementById('t3').value||'(walang sagot)'],
+    ['Solusyon ng Bansa (H3-A)',document.getElementById('t4').value||'(walang sagot)'],
+    ['Personal na Hakbang (H3-B)',document.getElementById('t5').value||'(walang sagot)'],
+    ['Slogan (H3-C)',document.getElementById('t6').value||'(walang sagot)'],
+    ['Final Reflection',document.getElementById('t7').value||'(walang sagot)'],
+  ];
+  var html='';
+  fields.forEach(function(f){
+    html+='<div class="sum-block"><div class="sum-label">'+f[0]+'</div><div class="sum-val">'+esc(f[1])+'</div></div>';
+  });
+  document.getElementById('summary-area').innerHTML=html;
+}
+
+function buildAndPrint(){buildSummary();setTimeout(function(){window.print();},200);}
+</script>
+</body>
+</html>
